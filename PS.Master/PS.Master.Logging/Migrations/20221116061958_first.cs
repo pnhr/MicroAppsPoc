@@ -5,7 +5,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace PS.Master.Logging.Migrations
 {
-    public partial class test_initial : Migration
+    public partial class first : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -28,7 +28,7 @@ namespace PS.Master.Logging.Migrations
                     ErrorId = table.Column<long>(type: "bigint", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     EventId = table.Column<int>(type: "int", nullable: true),
-                    UserId = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    UserId = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Message = table.Column<string>(type: "nvarchar(1000)", nullable: false),
                     ExceptionMessage = table.Column<string>(type: "nvarchar(1000)", nullable: true),
                     StackTrace = table.Column<string>(type: "nvarchar(max)", nullable: true),
@@ -36,8 +36,8 @@ namespace PS.Master.Logging.Migrations
                     ErrorType = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     MethodName = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     ClassName = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    UrlOrModule = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    LogLevelId = table.Column<int>(type: "int", nullable: false)
+                    UrlOrModule = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    LogLevelId = table.Column<int>(type: "int", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -74,10 +74,10 @@ namespace PS.Master.Logging.Migrations
                 {
                     ActivityId = table.Column<long>(type: "bigint", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    UserId = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    UserId = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Message = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    LogDateTime = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    UrlOrModule = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    LogDateTime = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    UrlOrModule = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     LogLevelId = table.Column<long>(type: "bigint", nullable: true),
                     AppLogLevelLogLevelId = table.Column<long>(type: "bigint", nullable: true)
                 },

@@ -12,7 +12,7 @@ namespace PS.Master.Logging.Database.Models
         public long ErrorId { get; set; }
 
         public int? EventId { get; set; }
-        public string UserId { get; set; }
+        public string? UserId { get; set; }
 
         [Column(TypeName = "nvarchar(1000)")]
         public string Message { get; set; }
@@ -26,7 +26,7 @@ namespace PS.Master.Logging.Database.Models
         public string? MethodName { get; set; }
         public string? ClassName { get; set; }
         [StringLength(0, MinimumLength = 500)]
-        public string UrlOrModule { get; set; }
-        public int LogLevelId { get; set; } = (int)LogLevel.Error;
+        public string? UrlOrModule { get; set; }
+        public int? LogLevelId { get; set; } = (int)LogLevel.Error;
     }
 }

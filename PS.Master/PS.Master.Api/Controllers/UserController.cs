@@ -34,7 +34,7 @@ namespace PS.Master.Api.Controllers
 
         [HttpPost]
         [Route("login")]
-        [Authorize(AuthenticationSchemes = NegotiateDefaults.AuthenticationScheme)]
+        //[Authorize(AuthenticationSchemes = NegotiateDefaults.AuthenticationScheme)]
         public async Task<ActionResult<AuthenticationResponse>> Login()
         {
             return await userService.Login(HttpContext);

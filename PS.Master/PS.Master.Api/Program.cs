@@ -56,7 +56,7 @@ namespace PS.Master.Api
                 options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
             }).AddCustomJwtBearer(builder.Configuration["Authentication:JWTSettings:SecretKey"]);
 
-            builder.Services.AddAuthentication(NegotiateDefaults.AuthenticationScheme).AddNegotiate();
+            //builder.Services.AddAuthentication(NegotiateDefaults.AuthenticationScheme).AddNegotiate();
 
             builder.Services.AddSwaggerGen(c =>
             {
@@ -90,17 +90,21 @@ namespace PS.Master.Api
             });
             var app = builder.Build();
 
-            if (app.Environment.IsDevelopment())
-            {
-                app.UseWebAssemblyDebugging();
-                app.UseSwagger();
-                app.UseSwaggerUI();
-            }
-            else
-            {
-                app.UseExceptionHandler("/Error");
-                app.UseHsts();
-            }
+            app.UseWebAssemblyDebugging();
+            app.UseSwagger();
+            app.UseSwaggerUI();
+
+            //if (app.Environment.IsDevelopment())
+            //{
+            //    app.UseWebAssemblyDebugging();
+            //    app.UseSwagger();
+            //    app.UseSwaggerUI();
+            //}
+            //else
+            //{
+            //    app.UseExceptionHandler("/Error");
+            //    app.UseHsts();
+            //}
 
             app.UseHttpsRedirection();
 

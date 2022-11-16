@@ -12,8 +12,8 @@ using PS.Master.Logging.Database;
 namespace PS.Master.Logging.Migrations
 {
     [DbContext(typeof(AppLoggingDbContext))]
-    [Migration("20221114083209_test_initial")]
-    partial class test_initial
+    [Migration("20221116061958_first")]
+    partial class first
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -35,7 +35,7 @@ namespace PS.Master.Logging.Migrations
                     b.Property<long?>("AppLogLevelLogLevelId")
                         .HasColumnType("bigint");
 
-                    b.Property<DateTime>("LogDateTime")
+                    b.Property<DateTime?>("LogDateTime")
                         .HasColumnType("datetime2");
 
                     b.Property<long?>("LogLevelId")
@@ -46,11 +46,9 @@ namespace PS.Master.Logging.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("UrlOrModule")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("UserId")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("ActivityId");
@@ -111,7 +109,7 @@ namespace PS.Master.Logging.Migrations
                     b.Property<string>("ExceptionMessage")
                         .HasColumnType("nvarchar(1000)");
 
-                    b.Property<int>("LogLevelId")
+                    b.Property<int?>("LogLevelId")
                         .HasColumnType("int");
 
                     b.Property<string>("Message")
@@ -125,11 +123,9 @@ namespace PS.Master.Logging.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("UrlOrModule")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("UserId")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("ErrorId");

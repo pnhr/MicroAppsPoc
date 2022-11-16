@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using Microsoft.Extensions.Logging;
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace PS.Master.Logging.Database.Models
@@ -9,12 +10,12 @@ namespace PS.Master.Logging.Database.Models
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public long ActivityId { get; set; }
-        public string UserId { get; set; }
+        public string? UserId { get; set; }
         public string Message { get; set; }
-        public DateTime LogDateTime { get; set; }
+        public DateTime? LogDateTime { get; set; }
 
         [StringLength(0, MinimumLength = 500)]
-        public string UrlOrModule { get; set; }
-        public long? LogLevelId { get; set; }
+        public string? UrlOrModule { get; set; }
+        public long? LogLevelId { get; set; } = (int)LogLevel.Information;
     }
 }

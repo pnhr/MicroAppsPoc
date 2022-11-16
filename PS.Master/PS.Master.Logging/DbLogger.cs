@@ -55,6 +55,10 @@ namespace PS.Master.Logging
                         break;
                 }
             }
+            catch (Exception ex)
+            {
+
+            }
             finally
             {
 
@@ -75,6 +79,10 @@ namespace PS.Master.Logging
                 loggerDbContext.ActivityLogs.Add(activityLog);
                 loggerDbContext.SaveChanges();
             }
+            catch (Exception ex)
+            {
+
+            }
             finally
             {
             }
@@ -92,6 +100,10 @@ namespace PS.Master.Logging
 
                 loggerDbContext.ActivityLogs.Add(activityLog);
                 loggerDbContext.SaveChanges();
+            }
+            catch (Exception ex)
+            {
+
             }
             finally
             {
@@ -122,6 +134,10 @@ namespace PS.Master.Logging
 
                 if (exception?.InnerException != null)
                     LogError(exception.InnerException.Message, exception.InnerException);
+            }
+            catch(Exception ex)
+            {
+
             }
             finally
             {
