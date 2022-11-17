@@ -121,6 +121,40 @@ namespace PS.Master.Data.Migrations
                     b.ToTable("tblEmployees");
                 });
 
+            modelBuilder.Entity("PS.Master.Domain.MasterConfig", b =>
+                {
+                    b.Property<int>("ConfigId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("CreatedBy")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("CreatedDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<bool>("IsActive")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("Key")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("UpdatedBy")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime?>("UpdatedDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Value")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("ConfigId");
+
+                    b.ToTable("tblMasterConfig");
+                });
+
             modelBuilder.Entity("PS.Master.Domain.Employee", b =>
                 {
                     b.HasOne("PS.Master.Domain.Employee", "Manager")

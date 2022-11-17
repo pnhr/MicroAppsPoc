@@ -34,7 +34,7 @@ namespace PS.Master.Api
                 await next(context);
             }
             catch (Exception ex)
-            {
+            {   
                 logger.LogError(ex, $"An unhandled exception has occurred while executing the rquest. Url: {context.Request.Path}. Request Data: " + GetRequestData(context));
                 var routeData = context.GetRouteData() ?? new RouteData();
                 var actionContext = new ActionContext(context, routeData, EmptyActionDescriptor);

@@ -5,42 +5,79 @@ using System;
 using System.IO;
 using System.DirectoryServices;
 using System.Collections;
+using PS.Master.Data;
+using PS.Master.Domain.Models;
+using PS.Master.Domain;
+using PS.Master.ViewModels.Models;
+using static MudBlazor.CategoryTypes;
+using System.Diagnostics;
 
 namespace PS.Master.Api.Services.Definitions
 {
     public class AppManagerService : IAppManagerService
     {
+        private readonly IConfigRepository _configRepo;
         private readonly IMapper _mapper;
         private readonly IConfiguration _config;
         private readonly ILogger<SampleService> _logger;
 
-        public AppManagerService(IMapper mapper, IConfiguration config, ILogger<SampleService> logger)
+        public AppManagerService(IConfigRepository configRepo, IMapper mapper, IConfiguration config, ILogger<SampleService> logger)
         {
+            this._configRepo = configRepo;
             this._mapper = mapper;
             this._config = config;
             this._logger = logger;
         }
-        public async Task<bool> CreateVirtualDir(string name)
+
+        public HttpRequest Request { get; set; }
+        public async Task<string> DeployWebApplication(AppArtifacts appArtifacts)
+        {
+            MasterConfig appDeployPathConfig = await _configRepo.GetConfig(AppConstants.MasterConfigKeys.AppDeployPath);
+            if (appDeployPathConfig == null)
+                return "";
+
+            string appPhysicalPath = await CreateVirtualDir(appArtifacts.AppName, 
+                                                                appDeployPathConfig.Value, 
+                                                                AppConstants.AppHostConstants.MasterSiteHostName, 
+                                                                AppConstants.AppHostConstants.MasterSiteId);
+            return appPhysicalPath;
+        }
+        private async Task<string> CreateVirtualDir(string appName, string rootPath, string hostName, int siteId)
         {
             
             try
             {
-                CreateVDir("IIS://Localhost/W3SVC/3/Root", name, "C:\\Projects\\Sites\\FromCodeApp");
+                string appPhysicalPath = $"{rootPath}\\{appName}";
 
-                string dir = "C:\\Projects\\Sites\\FromCodeApp";
-                string indexFile = "C:\\Projects\\Apps\\ChildApps\\index.html";
+                if (!Directory.Exists(appPhysicalPath))
+                    Directory.CreateDirectory(appPhysicalPath);
 
-                if (!Directory.Exists(dir))
-                    Directory.CreateDirectory(dir);
+                string iisUri = string.Format(AppConstants.AppHostConstants.IISPath, hostName, siteId.ToString()); //"IIS://Localhost/W3SVC/3/Root"
 
-                if (File.Exists(indexFile))
+                CreateVDir(iisUri, appName, appPhysicalPath);
+
+                if (File.Exists(AppConstants.AppHostConstants.SampleIndexHtmlFile))
                 {
-                    FileInfo fileInfo = new FileInfo(indexFile);
+                    FileInfo fileInfo = new FileInfo(AppConstants.AppHostConstants.SampleIndexHtmlFile);
                     string fileName = fileInfo.Name;
-                    fileInfo.CopyTo(Path.Combine(dir, fileName), true);
+                    fileInfo.CopyTo(Path.Combine(appPhysicalPath, fileName), true);
                 }
+                
+                string link = $"{AppConstants.AppHostConstants.MasterSiteProtocols}://{hostName}:{AppConstants.AppHostConstants.MasterSitePort}/{appName}";
 
-                return await Task.FromResult(true);
+#if !DEBUG
+                if (Request != null)
+                {
+                    string masterAppUrl = $"{Request.Scheme}://{Request.Host}:{Request.Host.Port ?? 80}";
+                    if (!string.IsNullOrWhiteSpace(masterAppUrl))
+                    {
+                        link = $"{masterAppUrl}/{appName}";
+                    }
+                }
+#endif
+
+
+                return await Task.FromResult(link);
             }
             catch(Exception ex)
             {
@@ -48,19 +85,15 @@ namespace PS.Master.Api.Services.Definitions
             }
         }
 
-        public static void CreateVDir(string metabasePath, string vDirName, string physicalPath)
+        private static void CreateVDir(string metabasePath, string vDirName, string physicalPath)
         {
-            //  metabasePath is of the form "IIS://<servername>/<service>/<siteID>/Root[/<vdir>]"
-            //    for example "IIS://localhost/W3SVC/1/Root" 
-            //  vDirName is of the form "<name>", for example, "MyNewVDir"
-            //  physicalPath is of the form "<drive>:\<path>", for example, "C:\Inetpub\Wwwroot"
-            Console.WriteLine("\nCreating virtual directory {0}/{1}, mapping the Root application to {2}:",
-                metabasePath, vDirName, physicalPath);
-
             DirectoryEntry site = new DirectoryEntry(metabasePath);
             string className = site.SchemaClassName.ToString();
+
             if ((className.EndsWith("Server")) || (className.EndsWith("VirtualDir")))
             {
+                string appRoot = "/LM" + metabasePath.Substring(metabasePath.IndexOf("/", ("IIS://".Length)));
+
                 DirectoryEntries vdirs = site.Children;
                 DirectoryEntry newVDir = vdirs.Add(vDirName, (className.Replace("Service", "VirtualDir")));
                 newVDir.Properties["Path"][0] = physicalPath;
@@ -68,7 +101,7 @@ namespace PS.Master.Api.Services.Definitions
                 // These properties are necessary for an application to be created.
                 newVDir.Properties["AppFriendlyName"][0] = vDirName;
                 newVDir.Properties["AppIsolated"][0] = "1";
-                newVDir.Properties["AppRoot"][0] = "/LM" + metabasePath.Substring(metabasePath.IndexOf("/", ("IIS://".Length)));
+                newVDir.Properties["AppRoot"][0] = appRoot;
 
                 newVDir.CommitChanges();
 
@@ -78,5 +111,6 @@ namespace PS.Master.Api.Services.Definitions
                 Console.WriteLine(" Failed. A virtual directory can only be created in a site or virtual directory node.");
         }
 
+        
     }
 }

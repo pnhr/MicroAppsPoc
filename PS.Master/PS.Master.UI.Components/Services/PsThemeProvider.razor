@@ -1,0 +1,14 @@
+﻿@namespace PS.Master.UI.Components
+
+<MudThemeProvider Theme="@psTheme" />
+
+@code {
+    MudTheme psTheme = new MudTheme
+        {
+            Palette = new Palette
+            {
+                Primary = PsTheme.Primary,
+                Secondary = PsTheme.Secondary
+            }
+        };
+}

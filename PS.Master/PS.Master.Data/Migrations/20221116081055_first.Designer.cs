@@ -12,8 +12,8 @@ using PS.Master.Data.Database;
 namespace PS.Master.Data.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20221114081756_initial")]
-    partial class initial
+    [Migration("20221116081055_first")]
+    partial class first
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -121,6 +121,40 @@ namespace PS.Master.Data.Migrations
                     b.HasIndex("ManagerId");
 
                     b.ToTable("tblEmployees");
+                });
+
+            modelBuilder.Entity("PS.Master.Domain.MasterConfig", b =>
+                {
+                    b.Property<int>("ConfigId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("CreatedBy")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("CreatedDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<bool>("IsActive")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("Key")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("UpdatedBy")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime?>("UpdatedDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Value")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("ConfigId");
+
+                    b.ToTable("tblMasterConfig");
                 });
 
             modelBuilder.Entity("PS.Master.Domain.Employee", b =>

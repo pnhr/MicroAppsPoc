@@ -53,12 +53,40 @@ namespace PS.Master.UI.Pages.ServiceHandlers.Definitions
             }
             return default(T);
         }
+
+        protected async Task<string> ReadApiStringResponseAsync(HttpResponseMessage httpResponse)
+        {
+            string res = "";
+            if (httpResponse.IsSuccessStatusCode && httpResponse.Content != null)
+            {
+                res = await httpResponse.Content.ReadAsStringAsync();
+            }
+            return res;
+        }
         protected async Task<TResult> Get<TResult>(string uriConfigKey)
         {
             var uri = GetServiceUri(uriConfigKey);
             var response = await http.GetAsync(uri);
             TResult vm = await ReadApiResponseAsync<TResult>(response);
             return vm;
+        }
+        protected async Task<string> GetString(string uriConfigKey)
+        {
+            var uri = GetServiceUri(uriConfigKey);
+            var response = await http.GetStringAsync(uri);
+            return response;
+        }
+
+        protected async Task<string> PostAndGetString<TInput>(TInput vm, string uriConfigKey)
+        {
+            if (vm == null)
+                throw new ArgumentNullException(AppMessages.ViewModelNullErrorMessage);
+
+            var uri = GetServiceUri(uriConfigKey);
+
+            var response = await http.PostAsJsonAsync(uri, vm);
+            string result = await ReadApiStringResponseAsync(response);
+            return result;
         }
         protected async Task<TResult> Post<TInput, TResult>(TInput vm, string uriConfigKey)
         {

@@ -11,5 +11,6 @@ namespace PS.Master.Data.Database
         }
         public DbSet<Employee> Employees { get; set; }
         public DbSet<ApplicationHost> ApplicationHosts { get; set; }
+        public DbSet<MasterConfig> MasterConfig { get; set; }
     }
 }

@@ -8,6 +8,7 @@ using PS.Master.UI.Auth.Services;
 using PS.Master.UI.Auth.Services.Definitions;
 using PS.Master.UI.Pages.ServiceHandlers.Definitions;
 using PS.Master.UI.Pages.ServiceHandlers.Interfaces;
+using PS.Master.UI.Components.Services;
 
 namespace PS.Master.UI
 {
@@ -31,6 +32,11 @@ namespace PS.Master.UI
                 client.BaseAddress = baseAddress;
             }).AddHttpMessageHandler<AppAutherizationHandler>();
 
+            builder.Services.AddHttpClient<IAppManagerServiceHandler, AppManagerServiceHandler>("AppManagerServiceClient", client =>
+            {
+                client.BaseAddress = baseAddress;
+            }).AddHttpMessageHandler<AppAutherizationHandler>();
+
             builder.Services.AddScoped<AuthenticationStateProvider, AppAuthenticationStateProvider>();
             builder.Services.AddTransient<AppAutherizationHandler>();
 
@@ -38,6 +44,8 @@ namespace PS.Master.UI
 
             builder.Services.AddOptions();
             builder.Services.AddAuthorizationCore();
+
+            builder.Services.AddUILibServices();
 
             //builder.Services.AddMsalAuthentication(options =>
             //{

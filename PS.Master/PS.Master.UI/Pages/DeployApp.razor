@@ -1,0 +1,40 @@
+﻿@page "/deploy"
+@inject ILogger<DeployApp> Logger
+@inject IAppManagerServiceHandler appMgrServiceHandler
+
+<h3>Deploy Applications</h3>
+
+<PsTextBox @bind-TextValue="@appId" Label="App Id" UiMargin="PsMargin.Dense" UiVariant="PsVariant.Outlined" />
+<PsTextBox @bind-TextValue="@appArtifacts.AppName" Label="App Name" UiMargin="PsMargin.Dense" UiVariant="PsVariant.Outlined" />
+<br />
+<PsButton IsProcessing="@isProcessing" BgColor="@PsColor.Primary" Label="Deploy" UiVariant="@PsVariant.Filled" OnBtnClick="OnDeploy" />
+
+<br />
+<br />
+
+@if (!string.IsNullOrWhiteSpace(appUri))
+{
+    <a href="@appUri">@appArtifacts.AppName</a>
+}
+
+@code {
+    public AppArtifacts appArtifacts = new();
+    public string appId = "";
+    public string appUri = "";
+    private bool isProcessing = false;
+    private async Task OnDeploy()
+    {
+        Logger.LogInformation("App Deployment Started");
+        isProcessing = true;
+        appArtifacts.AppId = Convert.ToInt32(appId);
+
+        
+
+        appUri = await appMgrServiceHandler.Deploy(appArtifacts);
+
+        if (!string.IsNullOrWhiteSpace(appUri))
+            isProcessing = false;
+
+        Logger.LogInformation("App Deployment completed");
+    }
+}

@@ -1,0 +1,22 @@
+﻿@namespace PS.Master.UI.Components
+
+<MudTextField @bind-Value="@TextValue" Label="@Label" Variant="@UiVariant.GetVariant()" Margin="@UiMargin.GetMargin()"></MudTextField>
+
+@code {
+    private string _value;
+
+    [Parameter] public string TextValue
+    {
+        get => _value;
+        set
+        {
+            if (_value == value) return;
+            _value = value;
+            TextValueChanged.InvokeAsync(value);
+        }
+    }
+    [Parameter] public string Label { get; set; }
+    [Parameter] public PsVariant UiVariant { get; set; }
+    [Parameter] public PsMargin UiMargin { get; set; }
+    [Parameter] public EventCallback<string> TextValueChanged { get; set; }
+}

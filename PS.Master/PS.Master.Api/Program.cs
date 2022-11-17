@@ -45,7 +45,11 @@ namespace PS.Master.Api
             builder.Services.AddScoped<IUserService, UserService>();
             builder.Services.AddScoped<ISampleService, SampleService>();
             builder.Services.AddScoped<IAppManagerService, AppManagerService>();
+
+
             builder.Services.AddScoped<ISampleRepository, SampleRepository>();
+            builder.Services.AddScoped<IConfigRepository, ConfigRepository>();
+
 
             builder.Services.AddAutoMapper(typeof(EmployeeAutoMapperProfile));
 

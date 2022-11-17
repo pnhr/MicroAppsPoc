@@ -5,7 +5,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace PS.Master.Data.Migrations
 {
-    public partial class initial : Migration
+    public partial class first : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -59,6 +59,24 @@ namespace PS.Master.Data.Migrations
                         principalColumn: "EmployeeId");
                 });
 
+            migrationBuilder.CreateTable(
+                name: "tblMasterConfig",
+                columns: table => new
+                {
+                    ConfigId = table.Column<int>(type: "int", nullable: false),
+                    Key = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Value = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    IsActive = table.Column<bool>(type: "bit", nullable: false),
+                    CreatedBy = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    CreatedDate = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    UpdatedBy = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    UpdatedDate = table.Column<DateTime>(type: "datetime2", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_tblMasterConfig", x => x.ConfigId);
+                });
+
             migrationBuilder.CreateIndex(
                 name: "IX_tblEmployees_ManagerId",
                 table: "tblEmployees",
@@ -72,6 +90,9 @@ namespace PS.Master.Data.Migrations
 
             migrationBuilder.DropTable(
                 name: "tblEmployees");
+
+            migrationBuilder.DropTable(
+                name: "tblMasterConfig");
         }
     }
 }

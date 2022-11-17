@@ -1,0 +1,37 @@
+﻿@namespace PS.Master.UI.Components
+
+<MudButton Disabled="@IsProcessing"
+           Variant="@UiVariant.GetVariant()"
+           EndIcon="@Icons.Material.Filled.Upload"
+           Color="@BgColor.GetColor()"
+           OnClick="@(async ()=> await OnBtnClick.InvokeAsync())">
+
+    @if (IsProcessing)
+    {
+        <MudProgressCircular Class="ms-n1" Size="Size.Small" Indeterminate="true" />
+        <MudText Class="ms-2">Processing</MudText>
+    }
+    else
+    {
+        <MudText>@Label</MudText>
+    }
+
+</MudButton>
+
+@code {
+    [Parameter] public string Label { get; set; }
+    [Parameter] public PsVariant UiVariant { get; set; }
+    [Parameter] public PsColor BgColor { get; set; }
+    [Parameter] public bool IsProcessing { get; set; } = false;
+
+    [Parameter] public EventCallback<MouseEventArgs> OnBtnClick { get; set; }
+
+
+    protected override Task OnInitializedAsync()
+    {
+        if (string.IsNullOrWhiteSpace(Label))
+            Label = "Click";
+
+        return base.OnInitializedAsync();
+    }
+}
