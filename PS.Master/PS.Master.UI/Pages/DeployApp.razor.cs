@@ -50,6 +50,15 @@ namespace PS.Master.UI.Pages
                 Logger.LogInformation("App Deployment Started");
                 isProcessing = true;
                 AppArtifactDetails.AppZipFileStageFolderPath = await appMgrServiceHandler.UploadAppFile(FileContent, AppArtifactDetails.AppName);
+
+                if(AppArtifactDetails.AppFiles != null && AppArtifactDetails.AppFiles.Count > 0)
+                {
+                    foreach(var appFile in AppArtifactDetails.AppFiles)
+                    {
+                        appFile.FilePath = AppArtifactDetails.AppZipFileStageFolderPath;
+                    }
+                }
+
                 DeployResult deployResult = await appMgrServiceHandler.Deploy(AppArtifactDetails);
                 if (!string.IsNullOrWhiteSpace(deployResult.AppUrl))
                     isProcessing = false;
