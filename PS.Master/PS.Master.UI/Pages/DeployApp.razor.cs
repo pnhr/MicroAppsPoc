@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Components.Forms;
 using PS.Master.UI.Helpers;
 using PS.Master.ViewModels.Models;
+using System.Buffers.Text;
 using System.Net.Http.Headers;
 
 namespace PS.Master.UI.Pages
@@ -16,6 +17,7 @@ namespace PS.Master.UI.Pages
         {
             AppArtifactDetails = new AppArtifacts();
             FileContent = new MultipartFormDataContent();
+
             return base.OnInitializedAsync();
         }
 
@@ -45,10 +47,11 @@ namespace PS.Master.UI.Pages
 
         private async Task OnDeploy()
         {
+            isProcessing = true;
             try
             {
                 Logger.LogInformation("App Deployment Started");
-                isProcessing = true;
+                
                 AppArtifactDetails.AppZipFileStageFolderPath = await appMgrServiceHandler.UploadAppFile(FileContent, AppArtifactDetails.AppName);
 
                 if(AppArtifactDetails.AppFiles != null && AppArtifactDetails.AppFiles.Count > 0)
@@ -61,11 +64,15 @@ namespace PS.Master.UI.Pages
 
                 DeployResult deployResult = await appMgrServiceHandler.Deploy(AppArtifactDetails);
                 if (!string.IsNullOrWhiteSpace(deployResult.AppUrl))
+                {
                     isProcessing = false;
+                }
                 Logger.LogInformation("App Deployment completed");
+                navManager.NavigateTo("/");
             }
             catch(Exception ex)
             {
+                isProcessing = false;
                 Logger.LogError($"Something went wrong while deploying application : {ex.ToString()}");
                 throw;
             }

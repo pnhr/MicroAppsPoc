@@ -1,8 +1,33 @@
 ﻿@page "/"
+@inject IAppManagerServiceHandler appMangerServiceHandler
 
 <PageTitle>Index</PageTitle>
 
-<h1>Hello, State Street!</h1>
-
-Welcome to your new app.
+<div class="container">
+    <div class="row">
+        @if (DeployedApps == null)
+        {
+            <div class="col-12">
+                <span class="text-primary">Please wait while fetching application..</span>
+            </div>
+        }
+        else if (DeployedApps.Count <= 0)
+        {
+            <div class="col-12">
+                <h5 class="text-danger">No Deployed Applications were found.</h5>
+            </div>
+        }
+        else
+        {
+            foreach(var app in DeployedApps)
+            {
+                <div class="col-3">
+                    <a href="@app.AppUrl" style="cursor:pointer">
+                        <PsCard ImgSrc="@String.Format("data:image/gif;base64,{0}", app.AppLogo)" Header="@app.AppName" Discription="This is simple false calc application" />
+                    </a>
+                </div>
+            }
+        }
+    </div>
+</div>
 

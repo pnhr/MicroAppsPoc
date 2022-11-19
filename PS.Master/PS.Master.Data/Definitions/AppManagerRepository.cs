@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using PS.Master.Data.Database;
 using PS.Master.Domain.DbModels;
+using PS.Master.Domain.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -30,6 +31,14 @@ namespace PS.Master.Data.Definitions
         {
             _dbContext.ApplicationHosts.Add(applicationHost);
             await _dbContext.SaveChangesAsync();
+        }
+
+        public async Task<List<DeployedAppInfo>> GetDeployedApps()
+        {
+            var apps = await _dbContext.ApplicationHosts.Where(x => x.IsActive)
+                                                    .Select(x => new DeployedAppInfo { AppLogo = x.AppLogo, AppName = x.AppName, AppUrl = x.AppVPath }).ToListAsync();
+
+            return apps;
         }
     }
 }

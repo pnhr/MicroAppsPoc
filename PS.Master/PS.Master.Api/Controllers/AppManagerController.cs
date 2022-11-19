@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
 using Newtonsoft.Json.Linq;
 using PS.Master.Api.Services.Interfaces;
 using PS.Master.ViewModels.Models;
@@ -43,6 +44,23 @@ namespace PS.Master.Api.Controllers
             }
             catch (Exception ex)
             {
+                _logger.LogError(ex, ex.ToString());
+                return StatusCode(Microsoft.AspNetCore.Http.StatusCodes.Status500InternalServerError, "Something went wrong while deploying files");
+            }
+        }
+
+        [HttpGet]
+        [Route("getapps")]
+        [Authorize]
+        public async Task<ActionResult<List<DeployResult>>> GetDeployedApps()
+        {
+            try
+            {
+                return await _appManagerService.GetDeployedApps();
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, ex.ToString());
                 return StatusCode(Microsoft.AspNetCore.Http.StatusCodes.Status500InternalServerError, "Something went wrong while deploying files");
             }
         }

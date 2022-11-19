@@ -76,9 +76,11 @@ namespace PS.Master.Api.Services.Definitions
             appHost.AppName = appArtifacts.AppName;
             appHost.AppDiscription = appArtifacts.AppDiscription;
             appHost.AppRootPath = appServer.DeployRootPath;
-            appHost.AppVPath = appArtifacts.AppName;
+            appHost.AppVPath = deployResult.AppUrl;
             appHost.IsActive = true;
-            appHost.AppLogo = GetLogo("");
+            appHost.AppLogo = deployResult.AppLogo;
+            appHost.CreatedBy = "dbo";
+            appHost.CreatedDate = DateTime.Now;
 
             await _appManagerRepo.AddApplication(appHost);
 
@@ -107,14 +109,17 @@ namespace PS.Master.Api.Services.Definitions
             deployResult.AppUrl = await CreateVirtualDir(appName: appArtifacts.AppName,
                                                                 rootPath: appServer.DeployRootPath,
                                                                 hostName: appServer.ServerName,
-                                                                siteId: appServer.MasterWebSiteId);
+                                                                siteId: appServer.MasterWebSiteId,
+                                                                masterAppBaseUri: masterAppBaseUri);
+
             deployResult.AppLogo = GetLogo("");
 
+            var files = Directory.GetFiles(appArtifacts.AppZipFileStageFolderPath, "*.zip", SearchOption.TopDirectoryOnly);
 
-            //File need to be copyed from stage to virtula folder - PENDING
-
-
-
+            foreach (var file in files)
+            {
+                await _appFileService.UnZipFile(file, Path.Combine(appServer.DeployRootPath, appArtifacts.AppName));
+            }
 
             ApplicationHost appHost = new ApplicationHost();
             appHost.AppName = appArtifacts.AppName;
@@ -124,8 +129,15 @@ namespace PS.Master.Api.Services.Definitions
             appHost.IsActive = true;
             appHost.AppLogo = deployResult.AppLogo;
 
+            await _appManagerRepo.AddApplication(appHost);
 
             return deployResult;
+        }
+        public async Task<List<DeployResult>> GetDeployedApps()
+        {
+            var apps = await _appManagerRepo.GetDeployedApps();
+            List<DeployResult> appsVm = apps.Select(x => new DeployResult { AppLogo = x.AppLogo, AppName = x.AppName, AppUrl = x.AppUrl }).ToList();
+            return appsVm;
         }
         private async Task<string> CreateVirtualDir(string appName, string rootPath, string hostName, int siteId, string masterAppBaseUri = "")
         {
@@ -194,11 +206,13 @@ namespace PS.Master.Api.Services.Definitions
 
             if (logoBytes != null)
             {
-                logo = Encoding.Default.GetString(logoBytes);
+                //logo = Encoding.Default.GetString(logoBytes);
+                logo = Convert.ToBase64String(logoBytes);
             }
 
             return logo;
         }
 
+        
     }
 }

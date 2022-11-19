@@ -4,9 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace PS.Master.ViewModels.Models
+namespace PS.Master.Domain.Models
 {
-    public class DeployResult
+    public class DeployedAppInfo
     {
         public string AppName { get; set; }
         public string AppUrl { get; set; }

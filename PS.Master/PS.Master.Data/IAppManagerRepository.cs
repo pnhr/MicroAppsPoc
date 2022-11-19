@@ -1,4 +1,5 @@
 ﻿using PS.Master.Domain.DbModels;
+using PS.Master.Domain.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -12,5 +13,6 @@ namespace PS.Master.Data
         Task<List<AppServer>> GetActiveAppServers();
         Task<AppServer> GetActiveAppServers(string serverCode);
         Task AddApplication(ApplicationHost applicationHost);
+        Task<List<DeployedAppInfo>> GetDeployedApps();
     }
 }

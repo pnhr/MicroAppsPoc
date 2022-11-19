@@ -11,6 +11,7 @@
         public const string SampleUsers = "Api:SampleUsers";
         public const string DeployWebApp = "Api:DeployWebApp";
         public const string AppFileUpload = "Api:AppFileUpload";
+        public const string GetDeployedApps = "Api:GetDeployedApps";
         #endregion
     }
 }

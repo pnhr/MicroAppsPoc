@@ -16,6 +16,12 @@ namespace PS.Master.UI.Pages.ServiceHandlers.Definitions
             return deployResult;
         }
 
+        public async Task<List<DeployResult>> GetDeployedApplications()
+        {
+            var apps = await Get<List<DeployResult>>(Helpers.UriHelper.GetDeployedApps);
+            return apps;
+        }
+
         public async Task<string> UploadAppFile(MultipartFormDataContent fileContent, string appName)
         {
             Dictionary<string, string> queryStringsToBeApended = new Dictionary<string, string>();

@@ -6,5 +6,6 @@ namespace PS.Master.Api.Services.Interfaces
     {
         Task<DeployResult> DeployWebApplication(AppArtifacts appArtifacts);
         Task<DeployResult> DeployWebApplication(AppArtifacts appArtifacts, string masterAppBaseUri);
+        Task<List<DeployResult>> GetDeployedApps();
     }
 }

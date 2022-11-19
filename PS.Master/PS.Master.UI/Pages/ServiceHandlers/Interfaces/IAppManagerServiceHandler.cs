@@ -6,5 +6,6 @@ namespace PS.Master.UI.Pages.ServiceHandlers.Interfaces
     {
         public Task<DeployResult> Deploy(AppArtifacts appArtifacts);
         public Task<string> UploadAppFile(MultipartFormDataContent fileContent, string appName);
+        public Task<List<DeployResult>> GetDeployedApplications();
     }
 }
