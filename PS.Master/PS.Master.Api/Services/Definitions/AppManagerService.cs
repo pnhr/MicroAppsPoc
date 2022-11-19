@@ -74,6 +74,7 @@ namespace PS.Master.Api.Services.Definitions
             
             ApplicationHost appHost = new ApplicationHost();
             appHost.AppName = appArtifacts.AppName;
+            appHost.AppDisplayName = appArtifacts.AppDisplayName;
             appHost.AppDiscription = appArtifacts.AppDiscription;
             appHost.AppRootPath = appServer.DeployRootPath;
             appHost.AppVPath = deployResult.AppUrl;
@@ -109,8 +110,7 @@ namespace PS.Master.Api.Services.Definitions
             deployResult.AppUrl = await CreateVirtualDir(appName: appArtifacts.AppName,
                                                                 rootPath: appServer.DeployRootPath,
                                                                 hostName: appServer.ServerName,
-                                                                siteId: appServer.MasterWebSiteId,
-                                                                masterAppBaseUri: masterAppBaseUri);
+                                                                siteId: appServer.MasterWebSiteId);
 
             deployResult.AppLogo = GetLogo("");
 
@@ -123,11 +123,14 @@ namespace PS.Master.Api.Services.Definitions
 
             ApplicationHost appHost = new ApplicationHost();
             appHost.AppName = appArtifacts.AppName;
+            appHost.AppDisplayName = appArtifacts.AppDisplayName;
             appHost.AppDiscription = appArtifacts.AppDiscription;
             appHost.AppRootPath = appServer.DeployRootPath;
-            appHost.AppVPath = appArtifacts.AppName;
+            appHost.AppVPath = deployResult.AppUrl;
             appHost.IsActive = true;
             appHost.AppLogo = deployResult.AppLogo;
+            appHost.CreatedBy = "dbo";
+            appHost.CreatedDate = DateTime.Now;
 
             await _appManagerRepo.AddApplication(appHost);
 
@@ -136,7 +139,11 @@ namespace PS.Master.Api.Services.Definitions
         public async Task<List<DeployResult>> GetDeployedApps()
         {
             var apps = await _appManagerRepo.GetDeployedApps();
-            List<DeployResult> appsVm = apps.Select(x => new DeployResult { AppLogo = x.AppLogo, AppName = x.AppName, AppUrl = x.AppUrl }).ToList();
+            List<DeployResult> appsVm = apps.Select(x => new DeployResult { AppLogo = x.AppLogo, 
+                                                                            AppName = x.AppName, 
+                                                                            AppUrl = x.AppUrl, 
+                                                                            AppDisplayName = x.AppDisplayName,
+                                                                            AppDiscription = x.AppDiscription }).ToList();
             return appsVm;
         }
         private async Task<string> CreateVirtualDir(string appName, string rootPath, string hostName, int siteId, string masterAppBaseUri = "")
@@ -149,13 +156,6 @@ namespace PS.Master.Api.Services.Definitions
             string iisUri = string.Format(AppConstants.AppHostConstants.IISPath, hostName, siteId.ToString()); //"IIS://Localhost/W3SVC/3/Root"
 
             CreateVDir(iisUri, appName, appPhysicalPath);
-
-            if (File.Exists(AppConstants.AppHostConstants.SampleIndexHtmlFile))
-            {
-                FileInfo fileInfo = new FileInfo(AppConstants.AppHostConstants.SampleIndexHtmlFile);
-                string fileName = fileInfo.Name;
-                fileInfo.CopyTo(Path.Combine(appPhysicalPath, fileName), true);
-            }
 
             string link = $"{AppConstants.AppHostConstants.MasterSiteProtocols}://{hostName}:{AppConstants.AppHostConstants.MasterSitePort}/{appName}";
 

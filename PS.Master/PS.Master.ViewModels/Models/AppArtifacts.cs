@@ -14,6 +14,7 @@ namespace PS.Master.ViewModels.Models
         }
         public int? AppId { get; set; }
         public string AppName { get; set; }
+        public string AppDisplayName { get; set; }
         public string AppDiscription { get; set; }
         public string? SelectedAppServerCode { get; set; }
         public string? AppZipFileStageFolderPath { get; set; }

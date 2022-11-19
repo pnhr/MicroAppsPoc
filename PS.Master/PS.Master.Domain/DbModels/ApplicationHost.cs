@@ -10,6 +10,7 @@ namespace PS.Master.Domain.DbModels
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int AppId { get; set; }
         public string AppName { get; set; }
+        public string AppDisplayName { get; set; }
         public string? AppDiscription { get; set; }
         public string? AppLogo { get; set; }
         public string AppRootPath { get; set; }

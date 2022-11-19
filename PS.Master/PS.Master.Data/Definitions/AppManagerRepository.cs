@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.AspNetCore.Mvc.ApiExplorer;
+using Microsoft.EntityFrameworkCore;
 using PS.Master.Data.Database;
 using PS.Master.Domain.DbModels;
 using PS.Master.Domain.Models;
@@ -36,7 +37,12 @@ namespace PS.Master.Data.Definitions
         public async Task<List<DeployedAppInfo>> GetDeployedApps()
         {
             var apps = await _dbContext.ApplicationHosts.Where(x => x.IsActive)
-                                                    .Select(x => new DeployedAppInfo { AppLogo = x.AppLogo, AppName = x.AppName, AppUrl = x.AppVPath }).ToListAsync();
+                                                    .Select(x => new DeployedAppInfo { AppLogo = x.AppLogo, 
+                                                                                        AppName = x.AppName,
+                                                                                        AppUrl = x.AppVPath,
+                                                                                        AppDisplayName = x.AppDisplayName,
+                                                                                        AppDiscription = x.AppDiscription
+                                                    }).ToListAsync();
 
             return apps;
         }
