@@ -10,10 +10,18 @@ namespace PS.Master.UI.Pages.ServiceHandlers.Definitions
         {
         }
 
-        public async Task<string> Deploy(AppArtifacts appArtifacts)
+        public async Task<DeployResult> Deploy(AppArtifacts appArtifacts)
         {
-            string uri = await PostAndGetString<AppArtifacts>(appArtifacts, Helpers.UriHelper.DeployWebApp);
-            return uri;
+            DeployResult deployResult = await Post<AppArtifacts, DeployResult>(appArtifacts, Helpers.UriHelper.DeployWebApp);
+            return deployResult;
+        }
+
+        public async Task<string> UploadAppFile(MultipartFormDataContent fileContent, string appName)
+        {
+            Dictionary<string, string> queryStringsToBeApended = new Dictionary<string, string>();
+            queryStringsToBeApended.Add("appName", appName);
+            string stageFolderPath = await PostFile(fileContent, Helpers.UriHelper.AppFileUpload, queryStringsToBeApended);
+            return stageFolderPath;
         }
     }
 }

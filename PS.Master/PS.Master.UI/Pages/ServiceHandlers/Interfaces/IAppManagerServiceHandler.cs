@@ -4,6 +4,7 @@ namespace PS.Master.UI.Pages.ServiceHandlers.Interfaces
 {
     public interface IAppManagerServiceHandler
     {
-        public Task<string> Deploy(AppArtifacts appArtifacts);
+        public Task<DeployResult> Deploy(AppArtifacts appArtifacts);
+        public Task<string> UploadAppFile(MultipartFormDataContent fileContent, string appName);
     }
 }

@@ -8,8 +8,16 @@ namespace PS.Master.ViewModels.Models
 {
     public class AppArtifacts
     {
-        public int AppId { get; set; }
+        public AppArtifacts()
+        {
+            AppFiles = new List<AppFile>();
+        }
+        public int? AppId { get; set; }
         public string AppName { get; set; }
-        public byte[]? Artifacts { get; set; } = default;
+        public string AppDiscription { get; set; }
+        public string? SelectedAppServerCode { get; set; }
+        public string? AppZipFileStageFolderPath { get; set; }
+        public List<AppFile> AppFiles { get; set; }
     }
+
 }

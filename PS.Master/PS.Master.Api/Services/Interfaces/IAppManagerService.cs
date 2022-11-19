@@ -4,7 +4,7 @@ namespace PS.Master.Api.Services.Interfaces
 {
     public interface IAppManagerService
     {
-        HttpRequest Request { get; set; }
-        Task<string> DeployWebApplication(AppArtifacts appArtifacts);
+        Task<DeployResult> DeployWebApplication(AppArtifacts appArtifacts);
+        Task<DeployResult> DeployWebApplication(AppArtifacts appArtifacts, string masterAppBaseUri);
     }
 }

@@ -80,7 +80,7 @@ namespace PS.Master.UI.Pages.ServiceHandlers.Definitions
         protected async Task<string> PostAndGetString<TInput>(TInput vm, string uriConfigKey)
         {
             if (vm == null)
-                throw new ArgumentNullException(AppMessages.ViewModelNullErrorMessage);
+                throw new ArgumentNullException(AppConstants.AppMessages.ErrorMessages.ViewModelNullErrorMessage);
 
             var uri = GetServiceUri(uriConfigKey);
 
@@ -88,10 +88,45 @@ namespace PS.Master.UI.Pages.ServiceHandlers.Definitions
             string result = await ReadApiStringResponseAsync(response);
             return result;
         }
+
+        protected async Task<string> PostFile(MultipartFormDataContent fileContent, string uriConfigKey)
+        {
+            if (fileContent == null)
+                throw new ArgumentNullException(AppConstants.AppMessages.ErrorMessages.ViewModelNullErrorMessage);
+
+            var uri = GetServiceUri(uriConfigKey);
+
+            var response = await http.PostAsync(uri, fileContent);
+            string result = await ReadApiStringResponseAsync(response);
+            return result;
+        }
+        protected async Task<string> PostFile(MultipartFormDataContent fileContent, string uriConfigKey, Dictionary<string, string> queryStringsToBeApended)
+        {
+            if (fileContent == null)
+                throw new ArgumentNullException(AppConstants.AppMessages.ErrorMessages.ViewModelNullErrorMessage);
+
+            var uri = GetServiceUri(uriConfigKey, queryStringsToBeApended);
+
+            var response = await http.PostAsync(uri, fileContent);
+            string result = await ReadApiStringResponseAsync(response);
+            return result;
+        }
+        protected async Task<TReturn> PostFile<TReturn>(MultipartFormDataContent fileContent, string uriConfigKey)
+        {
+            if (fileContent == null)
+                throw new ArgumentNullException(AppConstants.AppMessages.ErrorMessages.ViewModelNullErrorMessage);
+
+            var uri = GetServiceUri(uriConfigKey);
+
+            var response = await http.PostAsync(uri, fileContent);
+            TReturn result = await ReadApiResponseAsync<TReturn>(response);
+            return result;
+        }
+
         protected async Task<TResult> Post<TInput, TResult>(TInput vm, string uriConfigKey)
         {
             if (vm == null)
-                throw new ArgumentNullException(AppMessages.ViewModelNullErrorMessage);
+                throw new ArgumentNullException(AppConstants.AppMessages.ErrorMessages.ViewModelNullErrorMessage);
 
             var uri = GetServiceUri(uriConfigKey);
 

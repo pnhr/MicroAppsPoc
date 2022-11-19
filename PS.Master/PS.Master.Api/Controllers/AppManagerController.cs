@@ -26,11 +26,25 @@ namespace PS.Master.Api.Controllers
         [HttpPost]
         [Route("deploywebapp")]
         [Authorize]
-        public async Task<string> DeployWebApp(AppArtifacts appArtifacts)
+        public async Task<ActionResult<DeployResult>> DeployWebApp(AppArtifacts appArtifacts)
         {
-            _appManagerService.Request = Request;
-            string link = await _appManagerService.DeployWebApplication(appArtifacts);
-            return link;
+            try
+            {
+                #if DEBUG
+                DeployResult result = await _appManagerService.DeployWebApplication(appArtifacts);
+                #endif
+
+                #if !DEBUG
+                string masterAppUrl = $"{Request.Scheme}://{Request.Host}:{Request.Host.Port ?? 80}";
+                DeployResult result = await _appManagerService.DeployWebApplication(appArtifacts, masterAppUrl);
+                #endif
+
+                return result;
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(Microsoft.AspNetCore.Http.StatusCodes.Status500InternalServerError, "Something went wrong while deploying files");
+            }
         }
     }
 }

@@ -1,7 +1,7 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace PS.Master.Domain
+namespace PS.Master.Domain.DbModels
 {
     [Table("tblMasterConfig")]
     public class MasterConfig

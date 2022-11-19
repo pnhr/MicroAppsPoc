@@ -1,15 +1,16 @@
-﻿using System;
-using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace PS.Master.Domain
+namespace PS.Master.Domain.DbModels
 {
     [Table("tblApplicationHosts")]
     public class ApplicationHost
     {
         [Key]
+        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int AppId { get; set; }
         public string AppName { get; set; }
+        public string? AppDiscription { get; set; }
         public string? AppLogo { get; set; }
         public string AppRootPath { get; set; }
         public string AppVPath { get; set; }

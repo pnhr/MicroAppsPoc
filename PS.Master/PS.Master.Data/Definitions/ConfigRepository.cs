@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using PS.Master.Data.Database;
 using PS.Master.Domain;
+using PS.Master.Domain.DbModels;
 using System;
 using System.Collections.Generic;
 using System.Linq;
