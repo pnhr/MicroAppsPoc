@@ -1,42 +1,52 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk.Web">
 
-  <PropertyGroup>
-    <TargetFramework>net6.0</TargetFramework>
-    <Nullable>enable</Nullable>
-    <ImplicitUsings>enable</ImplicitUsings>
-    <UserSecretsId>BlazorWA.Server-297DDEA6-F093-409A-9DF6-F410EFAF3ABC</UserSecretsId>
-    <WebProject_DirectoryAccessLevelKey>0</WebProject_DirectoryAccessLevelKey>
-  </PropertyGroup>
+	<PropertyGroup>
+		<TargetFramework>net6.0</TargetFramework>
+		<Nullable>enable</Nullable>
+		<ImplicitUsings>enable</ImplicitUsings>
+		<UserSecretsId>BlazorWA.Server-297DDEA6-F093-409A-9DF6-F410EFAF3ABC</UserSecretsId>
+		<WebProject_DirectoryAccessLevelKey>0</WebProject_DirectoryAccessLevelKey>
+	</PropertyGroup>
 
-  <ItemGroup>
-    <PackageReference Include="AutoMapper" Version="12.0.0" />
-    <PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="12.0.0" />
-    <PackageReference Include="Microsoft.AspNetCore.Authentication.Negotiate" Version="6.0.11" />
-    <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly.Server" Version="6.0.11" />
-    <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="6.0.11">
-      <PrivateAssets>all</PrivateAssets>
-      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
-    </PackageReference>
-    <PackageReference Include="Microsoft.IdentityModel.Tokens" Version="6.25.0" />
-    <PackageReference Include="Microsoft.Web.Administration" Version="11.1.0" />
-    <PackageReference Include="Swashbuckle.AspNetCore" Version="6.4.0" />
-    <PackageReference Include="System.DirectoryServices" Version="7.0.0" />
-    <PackageReference Include="System.IdentityModel.Tokens.Jwt" Version="6.25.0" />
-  </ItemGroup>
+	<ItemGroup>
+		<PackageReference Include="AutoMapper" Version="12.0.0" />
+		<PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="12.0.0" />
+		<PackageReference Include="Microsoft.AspNetCore.Authentication.Negotiate" Version="6.0.11" />
+		<PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly.Server" Version="6.0.11" />
+		<PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="6.0.11">
+			<PrivateAssets>all</PrivateAssets>
+			<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+		</PackageReference>
+		<PackageReference Include="Microsoft.IdentityModel.Tokens" Version="6.25.0" />
+		<PackageReference Include="Microsoft.Web.Administration" Version="11.1.0" />
+		<PackageReference Include="Swashbuckle.AspNetCore" Version="6.4.0" />
+		<PackageReference Include="System.DirectoryServices" Version="7.0.0" />
+		<PackageReference Include="System.IdentityModel.Tokens.Jwt" Version="6.25.0" />
+	</ItemGroup>
 
-  <ItemGroup>
-    <ProjectReference Include="..\PS.Master.Data\PS.Master.Data.csproj" />
-    <ProjectReference Include="..\PS.Master.Domain\PS.Master.Domain.csproj" />
-    <ProjectReference Include="..\PS.Master.Logging\PS.Master.Logging.csproj" />
-    <ProjectReference Include="..\PS.Master.UI\PS.Master.UI.csproj" />
-    <ProjectReference Include="..\PS.Master.ViewModels\PS.Master.ViewModels.csproj" />
-  </ItemGroup>
+	<ItemGroup>
+		<Content Include="StaticFiles\**">
+			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+		</Content>
+	</ItemGroup>
 
-  <ItemGroup>
-    <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="6.0.11" NoWarn="NU1605" />
-    <PackageReference Include="Microsoft.AspNetCore.Authentication.OpenIdConnect" Version="6.0.11" NoWarn="NU1605" />
-    <PackageReference Include="Microsoft.Identity.Web" Version="1.25.5" />
-    <PackageReference Include="Microsoft.Identity.Web.UI" Version="1.25.5" />
-  </ItemGroup>
+	<ItemGroup>
+	  <None Remove="StaticFiles\PsMasterAppDatabaseData.png" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<ProjectReference Include="..\PS.Master.Data\PS.Master.Data.csproj" />
+		<ProjectReference Include="..\PS.Master.Domain\PS.Master.Domain.csproj" />
+		<ProjectReference Include="..\PS.Master.Logging\PS.Master.Logging.csproj" />
+		<ProjectReference Include="..\PS.Master.UI\PS.Master.UI.csproj" />
+		<ProjectReference Include="..\PS.Master.ViewModels\PS.Master.ViewModels.csproj" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="6.0.11" NoWarn="NU1605" />
+		<PackageReference Include="Microsoft.AspNetCore.Authentication.OpenIdConnect" Version="6.0.11" NoWarn="NU1605" />
+		<PackageReference Include="Microsoft.Identity.Web" Version="1.25.5" />
+		<PackageReference Include="Microsoft.Identity.Web.UI" Version="1.25.5" />
+	</ItemGroup>
 
 </Project>

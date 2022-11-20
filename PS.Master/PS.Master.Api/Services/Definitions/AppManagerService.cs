@@ -23,15 +23,17 @@ namespace PS.Master.Api.Services.Definitions
     public class AppManagerService : IAppManagerService
     {
         private readonly IAppManagerRepository _appManagerRepo;
+        private readonly IWebHostEnvironment _webHostEnv;
         private readonly IConfigRepository _configRepo;
         private readonly IAppFileService _appFileService;
         private readonly IMapper _mapper;
         private readonly IConfiguration _config;
         private readonly ILogger<SampleService> _logger;
 
-        public AppManagerService(IAppManagerRepository appManagerRepository, IConfigRepository configRepo, IAppFileService appFileService, IMapper mapper, IConfiguration config, ILogger<SampleService> logger)
+        public AppManagerService(IAppManagerRepository appManagerRepository, IWebHostEnvironment webHostEnv, IConfigRepository configRepo, IAppFileService appFileService, IMapper mapper, IConfiguration config, ILogger<SampleService> logger)
         {
             this._appManagerRepo = appManagerRepository;
+            this._webHostEnv = webHostEnv;
             this._configRepo = configRepo;
             this._appFileService = appFileService;
             this._mapper = mapper;
@@ -196,7 +198,8 @@ namespace PS.Master.Api.Services.Definitions
         {
             string logo = "";
             byte[] logoBytes;
-            Sys.Image logoImg = Sys.Image.FromFile("C:\\Projects\\Logo\\ps_logo.png");
+            string defaultLogoPath = Path.Combine(_webHostEnv.ContentRootPath, "StaticFiles", "ps_logo.png");
+            Sys.Image logoImg = Sys.Image.FromFile(defaultLogoPath);
 
             using (var ms = new MemoryStream())
             {
