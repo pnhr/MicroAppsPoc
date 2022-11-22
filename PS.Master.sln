@@ -19,6 +19,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PS.Master.UnitTest", "PS.Ma
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PS.Master.ViewModels", "PS.Master\PS.Master.ViewModels\PS.Master.ViewModels.csproj", "{8B4AF892-70FD-4E2A-B1BE-77288AB54A45}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ps.winservice", "E:\NewLaptop\PocProjects\dotnet\core\MASTER_APP_POC\WinServices\code\ps.winservice\ps.winservice.csproj", "{59FA5603-1BE2-4E5C-8EF2-E3F2E912507D}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -57,6 +59,10 @@ Global
 		{8B4AF892-70FD-4E2A-B1BE-77288AB54A45}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{8B4AF892-70FD-4E2A-B1BE-77288AB54A45}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{8B4AF892-70FD-4E2A-B1BE-77288AB54A45}.Release|Any CPU.Build.0 = Release|Any CPU
+		{59FA5603-1BE2-4E5C-8EF2-E3F2E912507D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{59FA5603-1BE2-4E5C-8EF2-E3F2E912507D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{59FA5603-1BE2-4E5C-8EF2-E3F2E912507D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{59FA5603-1BE2-4E5C-8EF2-E3F2E912507D}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
