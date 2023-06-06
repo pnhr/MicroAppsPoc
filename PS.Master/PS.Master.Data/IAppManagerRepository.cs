@@ -14,5 +14,6 @@ namespace PS.Master.Data
         Task<AppServer> GetActiveAppServers(string serverCode);
         Task AddApplication(ApplicationHost applicationHost);
         Task<List<DeployedAppInfo>> GetDeployedApps();
+        Task<bool> ExecuteDbScript(string sqlFilePath, string dbName, string connStr);
     }
 }

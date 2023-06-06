@@ -22,7 +22,7 @@
             foreach(var app in DeployedApps)
             {
                 <div class="col-3">
-                    <a href="@app.AppUrl" style="cursor:pointer">
+                    <a href="@app.AppUrl" style="cursor:pointer" target="_blank">
                         <PsCard ImgSrc="@String.Format("data:image/gif;base64,{0}", app.AppLogo)" Header="@app.AppDisplayName" Discription="@app.AppDiscription" />
                     </a>
                 </div>

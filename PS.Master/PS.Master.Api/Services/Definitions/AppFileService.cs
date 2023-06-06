@@ -29,7 +29,7 @@ namespace PS.Master.Api.Services.Definitions
             MasterConfig zipStagePathConfig = await _configRepo.GetConfig(AppConstants.MasterConfigKeys.ZIP_STAGE_PATH);
 
             if (zipStagePathConfig == null)
-                throw new Exception("Zip file stage path not configured in master application");
+                throw new Exception(AppConstants.ErrorMessage.ZipStagePathNotExists);
 
             string stageFolder = Path.Combine(zipStagePathConfig.Value, appName);
 
@@ -44,12 +44,26 @@ namespace PS.Master.Api.Services.Definitions
             await using FileStream fs = new(path, FileMode.Create);
             await file.CopyToAsync(fs);
 
-            //UnZipFile(path, stageFolder);
-            //File.Delete(path);
-
             return stageFolder;
         }
+        public async Task UnZipAllFiles(string folderPath)
+        {
+            var files = Directory.GetFiles(folderPath, "*.zip", SearchOption.TopDirectoryOnly);
 
+            List<string> fileNames = new List<string>();
+
+            foreach (var file in files)
+            {
+                await UnZipFile(file, folderPath);
+                fileNames.Add(file);
+            }
+
+            foreach(string file in files)
+            {
+                File.Delete(file);
+            }
+        }
+         
         public async Task UnZipFile(string filePath, string extractPath)
         {
             System.IO.Compression.ZipFile.ExtractToDirectory(filePath, extractPath);

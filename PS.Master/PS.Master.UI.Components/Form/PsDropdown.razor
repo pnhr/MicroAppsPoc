@@ -1,0 +1,39 @@
+﻿@namespace PS.Master.UI.Components
+
+<MudSelect @bind-Value="@SelectedValue" Margin="Margin.Dense" T="string" Label="@Label" Variant="Variant.Outlined">
+    @if (Options != null && Options.Count > 0)
+    {
+        foreach(var option in Options)
+        {
+            <MudSelectItem Value="@(option.Key)">@option.Value</MudSelectItem>
+        }
+    }
+</MudSelect>
+
+@code{
+    private string _value;
+    [Parameter] public string Label { get; set; } = "Select";
+
+    [Parameter] public Dictionary<string,string> Options { get; set; }
+
+    [Parameter]
+    public string SelectedValue
+    {
+        get => _value;
+        set
+        {
+            if (_value == value) return;
+            _value = value;
+            SelectedValueChanged.InvokeAsync(value);
+        }
+    }
+    [Parameter] public EventCallback<string> SelectedValueChanged { get; set; }
+
+    protected override Task OnInitializedAsync()
+    {
+        if (Options == null)
+            Options = new Dictionary<string, string>();
+
+        return base.OnInitializedAsync();
+    }
+}

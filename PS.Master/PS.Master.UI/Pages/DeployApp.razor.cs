@@ -10,13 +10,22 @@ namespace PS.Master.UI.Pages
     {
         public string appUri = "";
         private bool isProcessing = false;
+        private string confirmationMessage = "";
 
         public AppArtifacts AppArtifactDetails { get; set; }
         public MultipartFormDataContent FileContent { get; set; }
+
+        public Dictionary<string, string> AppServerOptions { get; set; }
         protected override Task OnInitializedAsync()
         {
             AppArtifactDetails = new AppArtifacts();
             FileContent = new MultipartFormDataContent();
+            AppServerOptions = new Dictionary<string, string>();
+
+            AppServerOptions.Add("APP_SERVER_DEFAULT", "Localhost");
+            AppServerOptions.Add("APP_SERVER_ONE", "APP_SERVER_ONE");
+            AppServerOptions.Add("APP_SERVER_TWO", "APP_SERVER_TWO");
+            AppServerOptions.Add("APP_SERVER_THREE", "APP_SERVER_THREE");
 
             return base.OnInitializedAsync();
         }
@@ -47,16 +56,35 @@ namespace PS.Master.UI.Pages
 
         private async Task OnDeploy()
         {
-            isProcessing = true;
+            
             try
             {
+                Deploy();
+                confirmationMessage = "Deployment request have been submitted. you will see the app on the home screen once it is deployed.";
+                await Task.Delay(3000);
+                navManager.NavigateTo("/");
+            }
+            catch(Exception ex)
+            {
+                isProcessing = false;
+                Logger.LogError($"Something went wrong while deploying application : {ex.ToString()}");
+                throw;
+            }
+            
+        }
+
+        private async Task<bool> Deploy()
+        {
+            var task = await Task.Run(async () =>
+            {
+                isProcessing = true;
                 Logger.LogInformation("App Deployment Started");
-                
+
                 AppArtifactDetails.AppZipFileStageFolderPath = await appMgrServiceHandler.UploadAppFile(FileContent, AppArtifactDetails.AppName);
 
-                if(AppArtifactDetails.AppFiles != null && AppArtifactDetails.AppFiles.Count > 0)
+                if (AppArtifactDetails.AppFiles != null && AppArtifactDetails.AppFiles.Count > 0)
                 {
-                    foreach(var appFile in AppArtifactDetails.AppFiles)
+                    foreach (var appFile in AppArtifactDetails.AppFiles)
                     {
                         appFile.FilePath = AppArtifactDetails.AppZipFileStageFolderPath;
                     }
@@ -68,15 +96,10 @@ namespace PS.Master.UI.Pages
                     isProcessing = false;
                 }
                 Logger.LogInformation("App Deployment completed");
-                navManager.NavigateTo("/");
-            }
-            catch(Exception ex)
-            {
-                isProcessing = false;
-                Logger.LogError($"Something went wrong while deploying application : {ex.ToString()}");
-                throw;
-            }
-            
+                return isProcessing;
+            });
+
+            return task;
         }
     }
 }

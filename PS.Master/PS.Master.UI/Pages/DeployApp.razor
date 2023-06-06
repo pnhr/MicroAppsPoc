@@ -8,11 +8,14 @@
 <PsTextBox @bind-TextValue="@AppArtifactDetails.AppName" Label="App Name" UiMargin="PsMargin.Dense" UiVariant="PsVariant.Outlined" />
 <PsTextBox @bind-TextValue="@AppArtifactDetails.AppDisplayName" Label="App Display Name" UiMargin="PsMargin.Dense" UiVariant="PsVariant.Outlined" />
 <PsTextBox @bind-TextValue="@AppArtifactDetails.AppDiscription" Label="App Discription" UiMargin="PsMargin.Dense" UiVariant="PsVariant.Outlined" />
+<PsDropdown @bind-SelectedValue="@AppArtifactDetails.SelectedAppServerCode" Options="@AppServerOptions" Label="App Server" />
 <br />
 
 <div class="browse-file">
     <PsFileUpload OnFileUpload="OnFileUpload" />
 </div>
+<br />
+<label style="color:#01b863;">@confirmationMessage</label>
 <br />
 <PsButton IsProcessing="@isProcessing" BgColor="@PsColor.Primary" Label="Deploy" UiVariant="@PsVariant.Filled" OnBtnClick="OnDeploy" />
 

@@ -1,0 +1,17 @@
+﻿using Microsoft.EntityFrameworkCore;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace PS.Master.Data.Database
+{
+    public class AppMasterDbContext : DbContext
+    {
+        public AppMasterDbContext(DbContextOptions<AppMasterDbContext> options) : base(options)
+        {
+
+        }
+    }
+}

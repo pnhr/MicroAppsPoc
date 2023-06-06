@@ -8,6 +8,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Microsoft.Data.SqlClient;
 
 namespace PS.Master.Data.Definitions
 {
@@ -45,6 +46,88 @@ namespace PS.Master.Data.Definitions
                                                     }).ToListAsync();
 
             return apps;
+        }
+
+        public async Task<bool> ExecuteDbScript(string sqlFilePath, string dbName, string connStr)
+        {
+            Deploy(sqlFilePath, dbName, connStr);
+            return true;
+        }
+
+        private string Deploy(string sqlFilePath, string dbName, string connStr)
+        {
+            List<string> batches = GetBatches(sqlFilePath, dbName);
+            SqlConnectionStringBuilder sqlConnBuilder = new SqlConnectionStringBuilder(connStr);
+            sqlConnBuilder.TrustServerCertificate = true;
+            SqlConnection conn = null;
+            bool isDbCreated = false;
+            try
+            {
+                foreach (var ste in batches)
+                {
+                    if (string.IsNullOrEmpty(ste))
+                        continue;
+                    if (isDbCreated == false)
+                    {
+                        sqlConnBuilder.InitialCatalog = "master";
+                        using (conn = new SqlConnection(sqlConnBuilder.ConnectionString))
+                        {
+                            conn.Open();
+                            SqlCommand cmd = new SqlCommand(ste, conn);
+                            cmd.ExecuteNonQuery();
+                        }
+                        if (conn != null)
+                        {
+                            conn.Close();
+                        }
+                        isDbCreated = true;
+                    }
+                    else
+                    {
+                        sqlConnBuilder.InitialCatalog = dbName;
+                        using (conn = new SqlConnection(sqlConnBuilder.ConnectionString))
+                        {
+                            conn.Open();
+                            SqlCommand cmd = new SqlCommand(ste, conn);
+                            cmd.ExecuteNonQuery();
+                        }
+                        if (conn != null)
+                        {
+                            conn.Close();
+                        }
+                    }
+                }
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+            finally
+            {
+                if (conn != null)
+                {
+                    conn.Close();
+                }
+            }
+            return "Database have been complted successfully!";
+        }
+
+        private List<string> GetBatches(string sqlFilePath, string dbName)
+        {
+            List<string> batches = new List<string>();
+            if (File.Exists(sqlFilePath))
+            {
+                string script = File.ReadAllText(sqlFilePath);
+                if (!string.IsNullOrEmpty(script))
+                {
+                    batches = script.Split("GO")?.ToList();
+                }
+                batches.RemoveAll(x => x.ToUpper().Contains($"USE [MASTER]"));
+                batches.RemoveAll(x => x.ToUpper().Contains($"USE {dbName.ToUpper()}"));
+                batches.RemoveAll(x => x.ToUpper().Contains($"USE [{dbName.ToUpper()}]"));
+
+            }
+            return batches;
         }
     }
 }

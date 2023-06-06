@@ -35,7 +35,7 @@ namespace PS.Master.UI.Auth
                     List<Claim> claims = new List<Claim>();
                     claims.Add(new Claim(ClaimTypes.NameIdentifier, loginUser.UserId));
                     claims.Add(new Claim(ClaimTypes.Email, loginUser.Email ?? ""));
-                    claims.Add(new Claim(AppClaimTypes.FirstName, loginUser.FirstName ?? ""));
+                    claims.Add(new Claim(AppClaimTypes.FirstName, loginUser.FirstName ?? loginUser.UserId));
                     claims.Add(new Claim(AppClaimTypes.LastName, loginUser.LastName ?? ""));
 
                     var claimsIdentity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);

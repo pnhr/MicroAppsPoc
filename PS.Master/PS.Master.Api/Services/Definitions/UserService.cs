@@ -84,7 +84,7 @@ namespace PS.Master.Api.Services.Definitions
             if (context.User.Identity.IsAuthenticated)
                 userVm.UserId = context.User.Identity.Name;
             else
-                userVm.UserId = WindowsIdentity.GetCurrent().Name;
+                userVm.UserId = Environment.UserName; //WindowsIdentity.GetCurrent().Name;
             AuthenticationResponse authenticationResponse = new AuthenticationResponse();
             if (!string.IsNullOrWhiteSpace(userVm.UserId))
             {
